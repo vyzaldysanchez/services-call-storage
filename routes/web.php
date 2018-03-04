@@ -14,3 +14,6 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->get('/api/services', 'ServicesController@index');
+$router->post('/api/services', 'ServicesController@store');
