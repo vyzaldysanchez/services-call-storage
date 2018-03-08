@@ -14,16 +14,19 @@ use Illuminate\Support\Carbon;
  */
 class Service extends Model
 {
+    public $timestamps = true;
     protected $table = 'services';
     protected $fillable = ['name'];
+    protected $dates = ['created_at'];
 
-    public $timestamps = true;
-
+    /**
+     * @return array
+     */
     public function toArray()
     {
         return [
             'name' => $this->name,
-            'called_at' => $this->created_at->toDateString()
+            'called_at' => $this->created_at->toDateTimeString()
         ];
     }
 }

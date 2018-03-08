@@ -15,5 +15,12 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/api/services', 'ServicesController@index');
-$router->post('/api/services', 'ServicesController@store');
+$router->group(['prefix' => 'api'], function () use ($router) {
+    $router->group(['prefix' => 'services'], function () use ($router) {
+        $router->get('/', 'ServicesController@index');
+        $router->get('/{sinceDate}[/{toDate}]', 'ServicesController@byDateRange');
+
+        $router->post('/', 'ServicesController@store');
+    });
+});
+

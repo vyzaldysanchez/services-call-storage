@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Service;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ServicesController extends Controller
@@ -20,8 +21,10 @@ class ServicesController extends Controller
     }
 
     /**
+     * Commits a service call
+     *
      * @param Request $request
-     * @return null
+     * @return null|Service
      */
     public function store(Request $request)
     {
@@ -30,5 +33,26 @@ class ServicesController extends Controller
         }
 
         return null;
+    }
+
+    /**
+     * Returns all called services between dates
+     *
+     * @param string $sinceDate
+     * @param string $toDate
+     *
+     * @returns array
+     */
+    public function byDateRange(string $sinceDate, string $toDate = '')
+    {
+        if (!$sinceDate) {
+            return [];
+        }
+
+        $since = Carbon::parse($sinceDate);
+        $to = $toDate ? Carbon::parse($toDate) : Carbon::now();
+
+        return Service::orWhereBetween('created_at', [$since, $to])
+            ->get();
     }
 }
