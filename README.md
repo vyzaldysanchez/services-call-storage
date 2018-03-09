@@ -1,5 +1,5 @@
 # services-call-storage
-UNAPEC project to serve as API calls register
+UNAPEC project to serve as API calls registry.
 
 Must have ([PHP](https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu-16-04) version >= 7.x) installed, also [composer](https://getcomposer.org/download/) to install dependencies.
 
