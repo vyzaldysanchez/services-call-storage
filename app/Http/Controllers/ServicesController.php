@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 
 class ServicesController extends Controller
 {
+    const TOP_TIME = '23:59:59';
+
     /**
      * Returns all called services
      *
@@ -49,10 +51,12 @@ class ServicesController extends Controller
             return [];
         }
 
-        $since = Carbon::parse($sinceDate);
-        $to = $toDate ? Carbon::parse($toDate) : Carbon::now();
+        $since = Carbon::parse($sinceDate)
+            ->toDateTimeString();
+        $to = ($toDate ? Carbon::parse($toDate . ' ' . static::TOP_TIME) : Carbon::now())
+            ->toDateTimeString();
 
-        return Service::orWhereBetween('created_at', [$since, $to])
+        return Service::whereBetween('created_at', [$since, $to])
             ->get();
     }
 }
