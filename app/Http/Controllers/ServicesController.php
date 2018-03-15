@@ -6,6 +6,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class ServicesController extends Controller
@@ -14,12 +16,14 @@ class ServicesController extends Controller
 
     /**
      * Returns all called services
+     * @param Request $request
      *
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function index()
+    public function index(Request $request): Collection
     {
-        return Service::all();
+        return $this->getByDateRangeQuery(Service::query(), $request)
+            ->get();
     }
 
     /**
@@ -40,15 +44,31 @@ class ServicesController extends Controller
     /**
      * Returns all called services between dates
      *
-     * @param string $sinceDate
-     * @param string $toDate
+     * @param string  $name
+     * @param Request $request
      *
-     * @returns array
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function byDateRange(string $sinceDate, string $toDate = '')
+    public function filter(string $name, Request $request): Collection
     {
+        $query = Service::where('name', $name);
+
+        return $this->getByDateRangeQuery($query, $request)->get();
+    }
+
+    /**
+     * @param Builder $query
+     * @param Request $request
+     *
+     * @return Builder
+     */
+    private function getByDateRangeQuery(Builder $query, Request $request): Builder
+    {
+        $sinceDate = $request->get('since');
+        $toDate = $request->get('to');
+
         if (!$sinceDate) {
-            return [];
+            return $query;
         }
 
         $since = Carbon::parse($sinceDate)
@@ -56,7 +76,7 @@ class ServicesController extends Controller
         $to = ($toDate ? Carbon::parse($toDate . ' ' . static::TOP_TIME) : Carbon::now())
             ->toDateTimeString();
 
-        return Service::whereBetween('created_at', [$since, $to])
-            ->get();
+        return $query
+            ->whereBetween('created_at', [$since, $to]);
     }
 }

@@ -18,7 +18,7 @@ $router->get('/', function () use ($router) {
 $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'services'], function () use ($router) {
         $router->get('/', 'ServicesController@index');
-        $router->get('/{sinceDate}[/{toDate}]', 'ServicesController@byDateRange');
+        $router->get('/{name}', 'ServicesController@filter');
 
         $router->post('/', 'ServicesController@store');
     });
