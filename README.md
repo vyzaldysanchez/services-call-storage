@@ -19,7 +19,7 @@ Do not forget to create your own `.env` file to setup the configuration.
 
 `GET /api/services` will return all the services called from 3rd party apps consuming this API.
 
-`GET /api/services/:since_date[/:to_date]` will return all the services within the date range in `YYYY-MM-DD` format. (`:to_date` is optional)
+`GET /api/services/:name?since=YYYY-MM-DD[&to=YYYY-MM-DD]` will return all the services within the date range in `YYYY-MM-DD` format by name. (`:to_date` is optional)
 
 To register a service call:
 
